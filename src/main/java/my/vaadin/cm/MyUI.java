@@ -1,5 +1,7 @@
 package my.vaadin.cm;
 
+import java.util.List;
+
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
@@ -7,10 +9,13 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import my.vaadin.cm.LectureService;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -21,23 +26,26 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Theme("mytheme")
 public class MyUI extends UI {
+	
+	private LectureService service = LectureService.getInstance();
+	private Grid<Lecture> grid = new Grid<>(Lecture.class);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
         
-        final TextField name = new TextField();
-        name.setCaption("Type your name here:");
-
-        Button button = new Button("Click Me");
-        button.addClickListener( e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue() 
-                    + ", it works!"));
-        });
+        grid.setColumns("birthDate", "firstName", "lastName", "email");
         
-        layout.addComponents(name, button);
+        layout.addComponent(grid);
+        
+        updateList();
         
         setContent(layout);
+    }
+    
+    private void updateList() {
+    	List<Lecture> lectures = service.findAll();
+    	grid.setItems(lectures);
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
