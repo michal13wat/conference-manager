@@ -22,7 +22,7 @@ public class LectureService {
 	private static LectureService instance;
 	private static final Logger LOGGER = Logger.getLogger(LectureService.class.getName());
 
-	private final HashMap<Long, Lecture> contacts = new HashMap<>();
+	private final HashMap<Long, LectureRow> contacts = new HashMap<>();
 	private long nextId = 0;
 
 	private LectureService() {
@@ -42,7 +42,7 @@ public class LectureService {
 	/**
 	 * @return all available Customer objects.
 	 */
-	public synchronized List<Lecture> findAll() {
+	public synchronized List<LectureRow> findAll() {
 		return findAll(null);
 	}
 
@@ -54,9 +54,9 @@ public class LectureService {
 	 *            if all objects should be returned.
 	 * @return list a Customer objects
 	 */
-	public synchronized List<Lecture> findAll(String stringFilter) {
-		ArrayList<Lecture> arrayList = new ArrayList<>();
-		for (Lecture contact : contacts.values()) {
+	public synchronized List<LectureRow> findAll(String stringFilter) {
+		ArrayList<LectureRow> arrayList = new ArrayList<>();
+		for (LectureRow contact : contacts.values()) {
 			try {
 				boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())
 						|| contact.toString().toLowerCase().contains(stringFilter.toLowerCase());
@@ -67,10 +67,10 @@ public class LectureService {
 				Logger.getLogger(LectureService.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-		Collections.sort(arrayList, new Comparator<Lecture>() {
+		Collections.sort(arrayList, new Comparator<LectureRow>() {
 
 			@Override
-			public int compare(Lecture o1, Lecture o2) {
+			public int compare(LectureRow o1, LectureRow o2) {
 				return (int) (o2.getId() - o1.getId());
 			}
 		});
@@ -89,9 +89,9 @@ public class LectureService {
 	 *            maximum result count
 	 * @return list a Customer objects
 	 */
-	public synchronized List<Lecture> findAll(String stringFilter, int start, int maxresults) {
-		ArrayList<Lecture> arrayList = new ArrayList<>();
-		for (Lecture contact : contacts.values()) {
+	public synchronized List<LectureRow> findAll(String stringFilter, int start, int maxresults) {
+		ArrayList<LectureRow> arrayList = new ArrayList<>();
+		for (LectureRow contact : contacts.values()) {
 			try {
 				boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())
 						|| contact.toString().toLowerCase().contains(stringFilter.toLowerCase());
@@ -102,10 +102,10 @@ public class LectureService {
 				Logger.getLogger(LectureService.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-		Collections.sort(arrayList, new Comparator<Lecture>() {
+		Collections.sort(arrayList, new Comparator<LectureRow>() {
 
 			@Override
-			public int compare(Lecture o1, Lecture o2) {
+			public int compare(LectureRow o1, LectureRow o2) {
 				return (int) (o2.getId() - o1.getId());
 			}
 		});
@@ -129,7 +129,7 @@ public class LectureService {
 	 * @param value
 	 *            the Customer to be deleted
 	 */
-	public synchronized void delete(Lecture value) {
+	public synchronized void delete(LectureRow value) {
 		contacts.remove(value.getId());
 	}
 
@@ -139,7 +139,7 @@ public class LectureService {
 	 *
 	 * @param entry
 	 */
-	public synchronized void save(Lecture entry) {
+	public synchronized void save(LectureRow entry) {
 		if (entry == null) {
 			LOGGER.log(Level.SEVERE,
 					"Customer is null. Are you sure you have connected your form to the application as described in tutorial chapter 7?");
@@ -149,7 +149,7 @@ public class LectureService {
 			entry.setId(nextId++);
 		}
 		try {
-			entry = (Lecture) entry.clone();
+			entry = (LectureRow) entry.clone();
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -171,13 +171,13 @@ public class LectureService {
 			Random r = new Random(0);
 			for (String name : names) {
 				String[] split = name.split(" ");
-				Lecture c = new Lecture();
-				c.setFirstName(split[0]);
-				c.setLastName(split[1]);
-				c.setEmail(split[0].toLowerCase() + "@" + split[1].toLowerCase() + ".com");
+				LectureRow c = new LectureRow();
+				c.setSubjectA(split[0]);
+				c.setSubjectB(split[1]);
+				c.setSubjectC(split[0].toLowerCase() + "@" + split[1].toLowerCase() + ".com");
 				c.setStatus(SubjectEnum.values()[r.nextInt(SubjectEnum.values().length)]);
                 int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
-                c.setBirthDate(LocalDate.now().plusDays(daysOld));
+                c.setDateTime(LocalDate.now().plusDays(daysOld));
 				save(c);
 			}
 		}

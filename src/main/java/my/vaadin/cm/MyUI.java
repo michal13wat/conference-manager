@@ -28,13 +28,13 @@ import my.vaadin.cm.LectureService;
 public class MyUI extends UI {
 	
 	private LectureService service = LectureService.getInstance();
-	private Grid<Lecture> grid = new Grid<>(Lecture.class);
+	private Grid<LectureRow> grid = new Grid<>(LectureRow.class);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
         
-        grid.setColumns("birthDate", "firstName", "lastName", "email");
+        grid.setColumns("dateTime", "subjectA", "subjectB", "subjectC");
         
         layout.addComponent(grid);
         
@@ -44,7 +44,7 @@ public class MyUI extends UI {
     }
     
     private void updateList() {
-    	List<Lecture> lectures = service.findAll();
+    	List<LectureRow> lectures = service.findAll();
     	grid.setItems(lectures);
     }
 
