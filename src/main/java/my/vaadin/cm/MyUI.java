@@ -16,7 +16,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-import my.vaadin.cm.LectureService;
+import my.vaadin.cm.UserService;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -30,6 +30,9 @@ public class MyUI extends UI {
 	
 	private LectureService service = LectureService.getInstance();
 	private Grid<LectureRow> grid = new Grid<>(LectureRow.class);
+	
+	private UserService userService = UserService.getInstance();
+	private Grid<User> usersGrid = new Grid<>(User.class);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -37,14 +40,23 @@ public class MyUI extends UI {
                 
         grid.setColumns("dateTime", "subjectA", "subjectB", "subjectC");
         
-        HorizontalLayout main = new HorizontalLayout(grid);
-        main.setSizeFull();
+        HorizontalLayout conferencesTable = new HorizontalLayout(grid);
+        conferencesTable.setSizeFull();
         grid.setSizeFull();
-        main.setExpandRatio(grid, 1);
+        conferencesTable.setExpandRatio(grid, 1);
         
-        layout.addComponent(main);
+        layout.addComponent(conferencesTable);
         
         updateList();
+        
+        //------------------------------------------
+        
+        usersGrid.setColumns("login", "email");
+        
+        HorizontalLayout restComponents = new HorizontalLayout(usersGrid);
+        layout.addComponent(restComponents);
+        
+        updateUsersList();
         
         setContent(layout);
     }
@@ -52,6 +64,11 @@ public class MyUI extends UI {
     private void updateList() {
     	List<LectureRow> lectures = service.findAll();
     	grid.setItems(lectures);
+    }
+    
+    private void updateUsersList() {
+    	List<User> users = userService.findAll();
+    	usersGrid.setItems(users);
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
