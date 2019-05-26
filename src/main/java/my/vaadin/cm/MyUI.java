@@ -30,13 +30,12 @@ public class MyUI extends UI {
 	
 	private LectureService service = LectureService.getInstance();
 	private Grid<LectureRow> grid = new Grid<>(LectureRow.class);
-<<<<<<< HEAD
 	
 	private UserService userService = UserService.getInstance();
 	private Grid<User> usersGrid = new Grid<>(User.class);
-=======
+	
 	private EditLecturePanel editLecture = new EditLecturePanel(this);
->>>>>>> login-panel
+	private RegisterUser registerUser = new RegisterUser(this);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -52,22 +51,15 @@ public class MyUI extends UI {
         layout.addComponent(conferencesTable);
         
         updateList();
-        
-<<<<<<< HEAD
+
         //------------------------------------------
         
         usersGrid.setColumns("login", "email");
         
-        HorizontalLayout restComponents = new HorizontalLayout(usersGrid);
+        HorizontalLayout restComponents = new HorizontalLayout(editLecture, usersGrid, registerUser);
         layout.addComponent(restComponents);
         
         updateUsersList();
-=======
-        HorizontalLayout otherConent = new HorizontalLayout(editLecture);
-        
-        layout.addComponent(otherConent);
-        
->>>>>>> login-panel
         
         setContent(layout);
     }
