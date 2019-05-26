@@ -30,6 +30,7 @@ public class MyUI extends UI {
 	
 	private LectureService service = LectureService.getInstance();
 	private Grid<LectureRow> grid = new Grid<>(LectureRow.class);
+	private EditLecturePanel editLecture = new EditLecturePanel(this);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -37,14 +38,19 @@ public class MyUI extends UI {
                 
         grid.setColumns("dateTime", "subjectA", "subjectB", "subjectC");
         
-        HorizontalLayout main = new HorizontalLayout(grid);
-        main.setSizeFull();
+        HorizontalLayout conferencesTable = new HorizontalLayout(grid);
+        conferencesTable.setSizeFull();
         grid.setSizeFull();
-        main.setExpandRatio(grid, 1);
+        conferencesTable.setExpandRatio(grid, 1);
         
-        layout.addComponent(main);
+        layout.addComponent(conferencesTable);
         
         updateList();
+        
+        HorizontalLayout otherConent = new HorizontalLayout(editLecture);
+        
+        layout.addComponent(otherConent);
+        
         
         setContent(layout);
     }
