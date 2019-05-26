@@ -1,8 +1,6 @@
 package my.vaadin.cm;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * A entity object, like in any other Java application. In a typical real world
@@ -19,7 +17,7 @@ public class LectureRow implements Serializable, Cloneable {
 	
 	private String subjectC = "";
 
-	private LocalDate dateTime;
+	private String dateTime;
 
 	private SubjectEnum status;
 
@@ -74,7 +72,7 @@ public class LectureRow implements Serializable, Cloneable {
 	 *
 	 * @return the value of dateTime
 	 */
-	public LocalDate getDateTime() {
+	public String getDateTime() {
 		return dateTime;
 	}
 
@@ -84,7 +82,7 @@ public class LectureRow implements Serializable, Cloneable {
 	 * @param dateTime
 	 *            new value of dateTime
 	 */
-	public void setDateTime(LocalDate dateTime) {
+	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
 	}
 
