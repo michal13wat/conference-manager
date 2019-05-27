@@ -70,6 +70,15 @@ public class MyUI extends UI {
             }
         });
         
+        grid.asSingleSelect().addValueChangeListener(event -> {
+            if (event.getValue() == null) {
+                editLecture.setVisible(false);
+            } else {
+            	editLecture.setLectureRow(event.getValue());
+            	editLecture.setVisible(true);
+            }
+        });
+        
         Button addUserBtn = new Button("Add new user");
         addUserBtn.addClickListener(e -> {
             usersGrid.asSingleSelect().clear();
@@ -78,8 +87,10 @@ public class MyUI extends UI {
             registerUser.loginTextFieldEnabled(true);
         });
         
+        editLecture.setVisible(false);
         
-        HorizontalLayout restComponents = new HorizontalLayout(editLecture, usersGrid, registerUser, addUserBtn, popup.getPopupView());
+        HorizontalLayout restComponents = new HorizontalLayout(editLecture, usersGrid, registerUser, 
+        		addUserBtn, popup.getPopupView());
         layout.addComponent(restComponents);
         
         updateUsersList();

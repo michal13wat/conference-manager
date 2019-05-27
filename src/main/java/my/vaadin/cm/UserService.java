@@ -141,7 +141,15 @@ public class UserService {
 	public synchronized void delete(User value) {
 		contacts.remove(value.getId());
 	}
-
+	
+	public synchronized User getUserByLogin(String login) {
+		for (User u : contacts.values()) {
+			if (u.getLogin() == login)
+				return u;
+		}
+		return null;
+	} 
+	
 	/**
 	 * Persists or updates customer in the system. Also assigns an identifier
 	 * for new Customer instances.

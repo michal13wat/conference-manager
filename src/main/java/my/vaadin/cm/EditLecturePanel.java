@@ -3,7 +3,9 @@ package my.vaadin.cm;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vaadin.data.Binder;
 import com.vaadin.event.FieldEvents;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.NativeSelect;
 
 public class EditLecturePanel extends EditLecturePanelDesign {
@@ -13,12 +15,16 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 	private UserService userService;
 	private LectureService lectureService;
 	private PopUpInfo popup;
+	private LectureRow lectureRow;
+	private Binder<LectureRow> binder = new Binder<>(LectureRow.class);
 	
-	public EditLecturePanel(MyUI myUI, UserService userService, LectureService lectureService, PopUpInfo popup) {
+	public EditLecturePanel(MyUI myUI, UserService userService, LectureService lectureService, 
+			PopUpInfo popup) {
 		this.myUI = myUI;
 		this.userService = userService;
 		this.lectureService = lectureService;
 		this.popup = popup;
+		binder.bindInstanceFields(this);
 		
 		updateUsers();
 		
@@ -28,7 +34,6 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 		subjects.add("Subject C");
 		
 		subject.setItems(subjects);
-		dateTime.setItems(lectureService.getAllTermsAsString());
 		
 		save.addClickListener(e -> {
 			try {
@@ -36,7 +41,25 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 			}catch (Exception exception) {
 				popup.showOnPopup(exception.getMessage());
 			}
+			setVisible(false);
+			myUI.updateList();
 		});
+		
+		cancel.addClickListener(e -> {
+			setVisible(false);
+			myUI.updateList();
+		});
+	}
+	
+	public void setLectureRow(LectureRow lectureRow) {
+		this.lectureRow = lectureRow;
+		binder.setBean(lectureRow);
+		
+		cancel.setVisible(lectureRow.isPersisted());
+	}
+	
+	public void setSaveBtnVisability(Boolean visability) {
+		save.setVisible(visability);
 	}
 	
 	public void updateUsers() {
@@ -45,9 +68,11 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 	
 	public void save() throws Exception {
 		if (login.isEmpty()) throw new Exception("User login is necessary!");
-		if (dateTime.isEmpty()) throw new Exception("Date and time are necessary!");
 		if (subject.isEmpty()) throw new Exception("Subject is necessary!");
 		
-		lectureService.save(new LectureRow());
+		this.lectureRow.addParticipant(subject.getSelectedItem().get(), 
+				userService.getUserByLogin(login.getSelectedItem().get()));
+		
+		lectureService.save(this.lectureRow);
 	}
 }

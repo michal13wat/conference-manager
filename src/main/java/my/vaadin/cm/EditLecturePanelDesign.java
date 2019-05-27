@@ -5,6 +5,7 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.NativeSelect;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.declarative.Design;
 
 /** 
@@ -20,7 +21,7 @@ import com.vaadin.ui.declarative.Design;
 @SuppressWarnings("serial")
 public class EditLecturePanelDesign extends FormLayout {
 	protected NativeSelect<java.lang.String> login;
-	protected NativeSelect<java.lang.String> dateTime;
+	protected TextField dateTime;
 	protected NativeSelect<java.lang.String> subject;
 	protected Button cancel;
 	protected Button save;

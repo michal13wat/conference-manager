@@ -50,11 +50,11 @@ public class LectureRow implements Serializable, Cloneable {
 	
 	private void checkIfAmISignendOnSomeLecture(User participant) throws Exception {
 		if (checkIfListContatinsUser(participantsA, participant))
-			throw new Exception("You are already signed on subject A!");
+			throw new Exception("Error! You are already signed on subject A!");
 		if (checkIfListContatinsUser(participantsB, participant))
-			throw new Exception("You are already signed on subject B!");
+			throw new Exception("Error! You are already signed on subject B!");
 		if (checkIfListContatinsUser(participantsC, participant))
-			throw new Exception("You are already signed on subject C!");
+			throw new Exception("Error! You are already signed on subject C!");
 	}
 	
 	private Boolean checkIfListContatinsUser(List<User> participants, User user) {
