@@ -10,6 +10,8 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
 /**
  * An in memory dummy "database" for the example purposes. In a typical Java app
  * this class would be replaced by e.g. EJB or a Spring based service class.
@@ -75,6 +77,14 @@ public class LectureService {
 			}
 		});
 		return arrayList;
+	}
+	
+	public List<String> getAllTermsAsString(){
+		List<String> terms = new ArrayList<>();
+		for (LectureRow lecture : findAll()) {
+			terms.add(lecture.getDateTime());
+		}
+		return terms;
 	}
 
 	/**

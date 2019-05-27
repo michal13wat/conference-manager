@@ -11,18 +11,22 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 	private LectureRow lecture;
 	private MyUI myUI;
 	private UserService userService;
+	private LectureService lectureService;
 	
-	public EditLecturePanel(MyUI myUI, UserService userService) {
+	public EditLecturePanel(MyUI myUI, UserService userService, LectureService lectureService) {
 		this.myUI = myUI;
 		this.userService = userService;
+		this.lectureService = lectureService;
 		
 		updateUsers();
 		
 		List<String> subjects = new ArrayList<>();
-		subjects.add("subA");
-		subjects.add("subB");
+		subjects.add("Subject A");
+		subjects.add("Subject B");
+		subjects.add("Subject C");
 		
 		subject.setItems(subjects);
+		dateTime.setItems(lectureService.getAllTermsAsString());
 	}
 	
 	public void updateUsers() {

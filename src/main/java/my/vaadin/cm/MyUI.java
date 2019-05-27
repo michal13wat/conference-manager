@@ -37,7 +37,7 @@ public class MyUI extends UI {
 	private UserService userService = UserService.getInstance();
 	private Grid<User> usersGrid = new Grid<>(User.class);
 	
-	private EditLecturePanel editLecture = new EditLecturePanel(this, userService);
+	private EditLecturePanel editLecture = new EditLecturePanel(this, userService, service);
 	private PopUpInfo popup = new PopUpInfo();
 	private RegisterUser registerUser = new RegisterUser(this, popup, editLecture);
 
