@@ -12,10 +12,12 @@ public class RegisterUser extends RegisterUserDesign {
 	private User user;
 	private MyUI myUI;
 	private PopUpInfo popup;
+	private EditLecturePanel editLecturePanel;
 	
-	public RegisterUser(MyUI myUI, PopUpInfo popup) {
+	public RegisterUser(MyUI myUI, PopUpInfo popup, EditLecturePanel editLecturePanel) {
 		this.myUI = myUI;
 		this.popup = popup;
+		this.editLecturePanel = editLecturePanel;
 		binder.bindInstanceFields(this);
 		registerNewUser.addClickListener(e -> {
         	try {
@@ -61,6 +63,7 @@ public class RegisterUser extends RegisterUserDesign {
 		service.save(user, true);
 		myUI.updateUsersList();
 		setVisible(false);
+		this.editLecturePanel.updateUsers();
 	}
 	
 	public void edit() throws Exception {

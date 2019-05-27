@@ -95,6 +95,6 @@ public class User implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		return email + " " + login;
+		return login;
 	}
 }

@@ -116,6 +116,14 @@ public class UserService {
 		}
 		return arrayList.subList(start, end);
 	}
+	
+	public List<String> getUsersAsStringList (){
+		List<String> users = new ArrayList<>();
+		for (User user : findAll()) {
+			users.add(user.toString());
+		}
+		return users;
+	}
 
 	/**
 	 * @return the amount of all customers in the system
