@@ -11,28 +11,25 @@ public class RegisterUser extends RegisterUserDesign {
 	private Binder<User> binder = new Binder<>(User.class);
 	private User user;
 	private MyUI myUI;
+	private PopUpInfo popup;
 	
-	private static final Logger LOGGER = Logger.getLogger(LectureService.class.getName());
-	
-	public RegisterUser(MyUI myUI) {
+	public RegisterUser(MyUI myUI, PopUpInfo popup) {
 		this.myUI = myUI;
+		this.popup = popup;
 		binder.bindInstanceFields(this);
 		registerNewUser.addClickListener(e -> {
         	try {
         		this.save();
         	}catch (Exception exeption) {
-    			LOGGER.log(Level.SEVERE,
-    					exeption.getMessage());
-    			
+    			popup.showOnPopup(exeption.getMessage());
         	}
 		});
 		
 		editUser.addClickListener(e -> {
         	try {
-        		this.save();
+        		this.edit();
         	}catch (Exception exception) {
-    			LOGGER.log(Level.SEVERE,
-    					exception.getMessage());
+    			popup.showOnPopup(exception.getMessage());
         	}
 		});
 		
@@ -59,8 +56,17 @@ public class RegisterUser extends RegisterUserDesign {
 	
 	public void save() throws Exception {
 		if (user.getLogin().isEmpty()) throw new Exception("Login can not be empty!");
+		if (user.getEmail().isEmpty()) throw new Exception("E-mail can not be empty!");
 		
-		service.save(user);
+		service.save(user, true);
+		myUI.updateUsersList();
+		setVisible(false);
+	}
+	
+	public void edit() throws Exception {
+		if (user.getEmail().isEmpty()) throw new Exception("E-mail can not be empty!");
+		
+		service.save(user, false);
 		myUI.updateUsersList();
 		setVisible(false);
 	}

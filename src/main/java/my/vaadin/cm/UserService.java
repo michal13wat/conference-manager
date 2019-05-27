@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -139,7 +140,7 @@ public class UserService {
 	 *
 	 * @param entry
 	 */
-	public synchronized void save(User entry) {
+	public synchronized void save(User entry, Boolean checkIfBusy) throws Exception {
 		if (entry == null) {
 			LOGGER.log(Level.SEVERE,
 					"Customer is null. Are you sure you have connected your form to the application as described in tutorial chapter 7?");
@@ -148,12 +149,23 @@ public class UserService {
 		if (entry.getId() == null) {
 			entry.setId(nextId++);
 		}
+		
+		if (checkIfBusy && !isLoginFree(entry.getLogin())) throw new Exception("Login is busy! Try other!");
+		
 		try {
 			entry = (User) entry.clone();
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 		contacts.put(entry.getId(), entry);
+	}
+	
+	private Boolean isLoginFree(String login) {
+		for (User user : findAll()) {
+			if (user.getLogin().equals(login))
+				return false;
+		}
+		return true;
 	}
 
 	/**
@@ -169,7 +181,9 @@ public class UserService {
 				User c = new User();
 				c.setLogin(login);
 				c.setEmail(login + "@sii.pl");
-				save(c);	
+				try {
+					save(c, false);
+				} catch (Exception e) {} // ignore exception...
 			}
 		}
 	}

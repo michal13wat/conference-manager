@@ -38,8 +38,8 @@ public class MyUI extends UI {
 	private Grid<User> usersGrid = new Grid<>(User.class);
 	
 	private EditLecturePanel editLecture = new EditLecturePanel(this);
-	private RegisterUser registerUser = new RegisterUser(this);
-	
+	private PopUpInfo popup = new PopUpInfo();
+	private RegisterUser registerUser = new RegisterUser(this, popup);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -78,7 +78,8 @@ public class MyUI extends UI {
             registerUser.loginTextFieldEnabled(true);
         });
         
-        HorizontalLayout restComponents = new HorizontalLayout(editLecture, usersGrid, registerUser, addUserBtn);
+        
+        HorizontalLayout restComponents = new HorizontalLayout(editLecture, usersGrid, registerUser, addUserBtn, popup.getPopupView());
         layout.addComponent(restComponents);
         
         updateUsersList();
