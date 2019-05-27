@@ -1,6 +1,8 @@
 package my.vaadin.cm;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A entity object, like in any other Java application. In a typical real world
@@ -16,10 +18,57 @@ public class LectureRow implements Serializable, Cloneable {
 	private String subjectB = "";
 	
 	private String subjectC = "";
+	
+	private List<User> participantsA = new ArrayList<>();
+	private List<User> participantsB = new ArrayList<>();
+	private List<User> participantsC = new ArrayList<>();	
 
 	private String dateTime;
 
 	private SubjectEnum status;
+	
+	public void addParticipant (String subject, User participant) throws Exception {
+		Exception exception = new Exception("Too many participants! Maximum 5 per lecture!");
+		checkIfAmISignendOnSomeLecture(participant);
+		switch (subject) {
+			case "Subject A":
+				if (participantsA.size() >= 5) throw exception;
+				participantsA.add(participant);
+				break;
+			case "Subject B":
+				if (participantsB.size() >= 5) throw exception;
+				participantsB.add(participant);
+				break;
+			case "Subject C":
+				if (participantsC.size() >= 5) throw exception;
+				participantsC.add(participant);
+				break;		
+			default:
+				throw new Exception("Incorrect subject value!");
+		}
+	}
+	
+	private void checkIfAmISignendOnSomeLecture(User participant) throws Exception {
+		if (checkIfListContatinsUser(participantsA, participant))
+			throw new Exception("You are already signed on subject A!");
+		if (checkIfListContatinsUser(participantsB, participant))
+			throw new Exception("You are already signed on subject B!");
+		if (checkIfListContatinsUser(participantsC, participant))
+			throw new Exception("You are already signed on subject C!");
+	}
+	
+	private Boolean checkIfListContatinsUser(List<User> participants, User user) {
+		for (User u : participants) {
+			if (u.equals(user)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void removeParticipant(String subject, User participant) {
+		
+	}
 
 	public Long getId() {
 		return id;
@@ -158,6 +207,6 @@ public class LectureRow implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		return subjectA + " " + subjectB;
+		return subjectA + " " + subjectB + " " + subjectC;
 	}
 }

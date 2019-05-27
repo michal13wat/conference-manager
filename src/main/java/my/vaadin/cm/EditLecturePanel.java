@@ -12,11 +12,13 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 	private MyUI myUI;
 	private UserService userService;
 	private LectureService lectureService;
+	private PopUpInfo popup;
 	
-	public EditLecturePanel(MyUI myUI, UserService userService, LectureService lectureService) {
+	public EditLecturePanel(MyUI myUI, UserService userService, LectureService lectureService, PopUpInfo popup) {
 		this.myUI = myUI;
 		this.userService = userService;
 		this.lectureService = lectureService;
+		this.popup = popup;
 		
 		updateUsers();
 		
@@ -27,9 +29,25 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 		
 		subject.setItems(subjects);
 		dateTime.setItems(lectureService.getAllTermsAsString());
+		
+		save.addClickListener(e -> {
+			try {
+				save();
+			}catch (Exception exception) {
+				popup.showOnPopup(exception.getMessage());
+			}
+		});
 	}
 	
 	public void updateUsers() {
 		this.login.setItems(userService.getUsersAsStringList());
+	}
+	
+	public void save() throws Exception {
+		if (login.isEmpty()) throw new Exception("User login is necessary!");
+		if (dateTime.isEmpty()) throw new Exception("Date and time are necessary!");
+		if (subject.isEmpty()) throw new Exception("Subject is necessary!");
+		
+		lectureService.save(new LectureRow());
 	}
 }
