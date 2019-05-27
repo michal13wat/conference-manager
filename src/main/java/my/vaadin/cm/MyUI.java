@@ -1,6 +1,8 @@
 package my.vaadin.cm;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -12,6 +14,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -36,6 +39,7 @@ public class MyUI extends UI {
 	
 	private EditLecturePanel editLecture = new EditLecturePanel(this);
 	private RegisterUser registerUser = new RegisterUser(this);
+	
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -56,7 +60,25 @@ public class MyUI extends UI {
         
         usersGrid.setColumns("login", "email");
         
-        HorizontalLayout restComponents = new HorizontalLayout(editLecture, usersGrid, registerUser);
+        usersGrid.asSingleSelect().addValueChangeListener(event -> {
+            if (event.getValue() == null) {
+                registerUser.setVisible(false);
+            } else {
+            	registerUser.setUser(event.getValue());	
+                registerUser.setRegisterBtnVisability(false);
+                registerUser.loginTextFieldEnabled(false);
+            }
+        });
+        
+        Button addUserBtn = new Button("Add new user");
+        addUserBtn.addClickListener(e -> {
+            usersGrid.asSingleSelect().clear();
+        	registerUser.setUser(new User());
+            registerUser.setRegisterBtnVisability(true);
+            registerUser.loginTextFieldEnabled(true);
+        });
+        
+        HorizontalLayout restComponents = new HorizontalLayout(editLecture, usersGrid, registerUser, addUserBtn);
         layout.addComponent(restComponents);
         
         updateUsersList();
@@ -64,12 +86,12 @@ public class MyUI extends UI {
         setContent(layout);
     }
     
-    private void updateList() {
+    public void updateList() {
     	List<LectureRow> lectures = service.findAll();
     	grid.setItems(lectures);
     }
     
-    private void updateUsersList() {
+    public void updateUsersList() {
     	List<User> users = userService.findAll();
     	usersGrid.setItems(users);
     }
