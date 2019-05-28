@@ -1,5 +1,13 @@
 package my.vaadin.cm;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +59,18 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 		});
 	}
 	
+	public void sendMail(String to) throws Exception {		
+        try (FileWriter f = new FileWriter("email.txt", true);
+                BufferedWriter b = new BufferedWriter(f);
+                PrintWriter p = new PrintWriter(b);) {
+        	
+            p.println("email to: " + to + " You are signed on to conference!");
+
+        } catch (IOException i) {
+            throw new Exception("Problem with send file...");
+        }
+	}
+	
 	public void setLectureRow(LectureRow lectureRow) {
 		this.lectureRow = lectureRow;
 		binder.setBean(lectureRow);
@@ -70,9 +90,10 @@ public class EditLecturePanel extends EditLecturePanelDesign {
 		if (login.isEmpty()) throw new Exception("User login is necessary!");
 		if (subject.isEmpty()) throw new Exception("Subject is necessary!");
 		
-		this.lectureRow.addParticipant(subject.getSelectedItem().get(), 
-				userService.getUserByLogin(login.getSelectedItem().get()));
+		User u = userService.getUserByLogin(login.getSelectedItem().get());
+		this.lectureRow.addParticipant(subject.getSelectedItem().get(), u);
 		
 		lectureService.save(this.lectureRow);
+		sendMail(u.getEmail());
 	}
 }

@@ -178,9 +178,9 @@ public class LectureService {
 			
 			for (int j = 0; j < datesTimes.length; j++) {
 				LectureRow c = new LectureRow();
-				c.setSubjectA("SubjectA" + j);
-				c.setSubjectB("SubjectB" + j);
-				c.setSubjectC("SubjectC" + j);
+				c.setSubjectA("SubjectA" + j + " P:");
+				c.setSubjectB("SubjectB" + j + " P:");
+				c.setSubjectC("SubjectC" + j + " P:");
 	            c.setDateTime(datesTimes[j]);
 				save(c);	
 			}

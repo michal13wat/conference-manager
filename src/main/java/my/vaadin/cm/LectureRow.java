@@ -34,6 +34,7 @@ public class LectureRow implements Serializable, Cloneable {
 			case "Subject A":
 				if (participantsA.size() >= 5) throw exception;
 				participantsA.add(participant);
+				updateSubjectA();
 				break;
 			case "Subject B":
 				if (participantsB.size() >= 5) throw exception;
@@ -46,6 +47,20 @@ public class LectureRow implements Serializable, Cloneable {
 			default:
 				throw new Exception("Incorrect subject value!");
 		}
+	}
+	
+	public void updateSubjectA() {
+		String baseString = subjectA.substring(0, subjectA.indexOf("P:") + 2);
+		for(User u : participantsA)
+			baseString += " " + u.getLogin();
+	}
+	
+	public void updateSubjectB() {
+		
+	}
+	
+	public void updateSubjectC() {
+		
 	}
 	
 	private void checkIfAmISignendOnSomeLecture(User participant) throws Exception {
